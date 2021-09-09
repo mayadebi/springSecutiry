@@ -1,5 +1,6 @@
 package com.fzy.springserctity.service;
 
+import com.fzy.springserctity.handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;

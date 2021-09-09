@@ -1,5 +1,7 @@
 package com.fzy.springserctity.config;
 
+import com.fzy.springserctity.handler.MyAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,15 +11,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+    @Autowired
+    private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // 自定义登录页面
-        http.formLogin().loginPage("/login.html")
+        http.formLogin()
+                // 自定义登录参数
+                .usernameParameter("username")
+                .passwordParameter("password")
+                // 自定义登录页面
+                .loginPage("/login.html")
                 // 必须和表单提交的接口一样 就会去执行自定义登录
                 .loginProcessingUrl("/login")
                 // 登录成功后跳转的页面  post请求需要在controller配置
-                .successForwardUrl("/toMain")
+//                .successForwardUrl("/toMain")
+                // 使用自定义登录处理器
+                .successHandler(myAuthenticationSuccessHandler)
                 // 登录失败跳转
                 .failureForwardUrl("/toError")
         ;
