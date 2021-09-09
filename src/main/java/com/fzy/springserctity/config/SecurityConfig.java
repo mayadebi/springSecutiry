@@ -59,6 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(whiteList).permitAll()
                 // 正则表达式  可以匹配方法类型  可以不写
                 .regexMatchers(HttpMethod.GET,zzWhiteList).permitAll()
+                // 权限控制 有这个权限才能访问这个路径
+                .antMatchers("/main1.html").hasAnyAuthority("admin","fzy")
+                // 使用角色控制
+                .antMatchers("/main2.html").hasAnyRole("fzy")
+                // 使用IP地址放行
+                .antMatchers("/main3.html").hasIpAddress("127.0.0.1")
                 // 所有的请求必须认证
                 // 必须放在最后面
                 .anyRequest().authenticated();
