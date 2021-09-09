@@ -5,6 +5,7 @@ import com.fzy.springserctity.handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,10 +13,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    // 设置白名单
+    public static final String[] whiteList = {
+            "/login.html",
+            "/error.html",
+            "/css/**",
+            "/**/*.css",
+            "/js/**",
+            "/**/*.js",
+            "/img/**",
+            "/**/*.png",
+            "/**/*.jpg",
+    };
+    // 设置正则表达式白名单
+    public static final String[] zzWhiteList = {
+            ".+[.]png"
+    };
     @Autowired
     private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
     @Autowired
     private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -38,8 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 授权
         http.authorizeRequests()
                 // 设置白名单
-                .antMatchers("/login.html","/error.html").permitAll()
+                .antMatchers(whiteList).permitAll()
+                // 正则表达式  可以匹配方法类型  可以不写
+                .regexMatchers(HttpMethod.GET,zzWhiteList).permitAll()
                 // 所有的请求必须认证
+                // 必须放在最后面
                 .anyRequest().authenticated();
         // 关闭防火墙
         http.csrf().disable();
