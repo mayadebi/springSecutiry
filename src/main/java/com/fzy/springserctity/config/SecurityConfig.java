@@ -1,5 +1,6 @@
 package com.fzy.springserctity.config;
 
+import com.fzy.springserctity.handler.MyAuthenticationFailureHandler;
 import com.fzy.springserctity.handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
+    @Autowired
+    private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -28,7 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 使用自定义登录处理器
                 .successHandler(myAuthenticationSuccessHandler)
                 // 登录失败跳转
-                .failureForwardUrl("/toError")
+//                .failureForwardUrl("/toError")
+                // 使用自定义失败处理器
+                .failureHandler(myAuthenticationFailureHandler)
         ;
         // 授权
         http.authorizeRequests()
