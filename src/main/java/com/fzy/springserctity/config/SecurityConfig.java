@@ -18,11 +18,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")
                 // 登录成功后跳转的页面  post请求需要在controller配置
                 .successForwardUrl("/toMain")
+                // 登录失败跳转
+                .failureForwardUrl("/toError")
         ;
         // 授权
         http.authorizeRequests()
                 // 设置白名单
-                .antMatchers("/login.html").permitAll()
+                .antMatchers("/login.html","/error.html").permitAll()
                 // 所有的请求必须认证
                 .anyRequest().authenticated();
         // 关闭防火墙

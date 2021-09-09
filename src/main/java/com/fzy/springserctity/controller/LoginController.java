@@ -9,4 +9,8 @@ public class LoginController {
     public String login(){
         return "redirect:main.html";
     }
+    @RequestMapping("/toError")
+    public String error(){
+        return "redirect:error.html";
+    }
 }
