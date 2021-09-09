@@ -18,6 +18,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("执行自定义登录逻辑");
         // 1，根据用户名去数据库查询，不存在就报UsernameNotFoundException
         if(!"admin".equals(username)){
             throw new UsernameNotFoundException("用户名不存在");
