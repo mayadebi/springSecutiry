@@ -29,6 +29,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         return new User(username,password, AuthorityUtils
                 // 添加权限  admin 和角色 fzy
-                .commaSeparatedStringToAuthorityList("admin,ROLE_fzy"));
+                .commaSeparatedStringToAuthorityList("admin,ROLE_admin"));
     }
 }

@@ -1,5 +1,6 @@
 package com.fzy.springserctity.config;
 
+import com.fzy.springserctity.handler.MyAccessDenidfHandler;
 import com.fzy.springserctity.handler.MyAuthenticationFailureHandler;
 import com.fzy.springserctity.handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 设置白名单
     public static final String[] whiteList = {
             "/login.html",
-            "/error.html",
-            "/css/**",
-            "/**/*.css",
-            "/js/**",
-            "/**/*.js",
-            "/img/**",
-            "/**/*.png",
-            "/**/*.jpg",
+            "/error.html"
+//            "/css/**",
+//            "/**/*.css",
+//            "/js/**",
+//            "/**/*.js",
+//            "/img/**",
+//            "/**/*.png",
+//            "/**/*.jpg",
     };
     // 设置正则表达式白名单
     public static final String[] zzWhiteList = {
@@ -33,7 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
     @Autowired
     private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
-
+    @Autowired
+    private MyAccessDenidfHandler myAccessDenidfHandler;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -53,21 +55,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 使用自定义失败处理器
                 .failureHandler(myAuthenticationFailureHandler)
         ;
+
         // 授权
         http.authorizeRequests()
                 // 设置白名单
                 .antMatchers(whiteList).permitAll()
                 // 正则表达式  可以匹配方法类型  可以不写
-                .regexMatchers(HttpMethod.GET,zzWhiteList).permitAll()
+//                .regexMatchers(HttpMethod.GET,zzWhiteList).permitAll()
                 // 权限控制 有这个权限才能访问这个路径
-                .antMatchers("/main1.html").hasAnyAuthority("admin","fzy")
+//                .antMatchers("/main1.html").hasAnyAuthority("admin","fzy")
                 // 使用角色控制
-                .antMatchers("/main2.html").hasAnyRole("fzy")
+//                .antMatchers("/main2.html").hasAnyRole("fzy")
                 // 使用IP地址放行
-                .antMatchers("/main3.html").hasIpAddress("127.0.0.1")
+//                .antMatchers("/main3.html").hasIpAddress("127.0.0.1")
                 // 所有的请求必须认证
                 // 必须放在最后面
                 .anyRequest().authenticated();
+
+        // 自定义403
+        http.exceptionHandling().accessDeniedHandler(myAccessDenidfHandler);
+
         // 关闭防火墙
         http.csrf().disable();
     }
