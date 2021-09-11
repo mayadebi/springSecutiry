@@ -21,4 +21,9 @@ public class LoginController {
     public String error(){
         return "redirect:error.html";
     }
+    @RequestMapping("/thymeleaf")
+    public String thymeleaf(){
+        return "thymeleaf";
+    }
+
 }

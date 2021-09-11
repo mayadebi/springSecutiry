@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+登录账号:<span sec:authentication="name"></span>
+<button sec:authorize="hasAuthority('/insert')">新增</button>
+<button sec:authorize="hasRole('admin')">新增</button>
+</body>
+</html>
