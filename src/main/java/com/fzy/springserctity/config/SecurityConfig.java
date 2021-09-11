@@ -95,6 +95,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义登录逻辑
                 .userDetailsService(userDetailService)
         ;
+        // 退出
+        http.logout()
+                // 退出成功后跳转的页面
+                .logoutSuccessUrl("/login.html")
+                // 定义退出接口 莫如logout  可以不写
+                .logoutUrl("/logout")
+
+        ;
+
+
         // 关闭防火墙
         http.csrf().disable();
     }
