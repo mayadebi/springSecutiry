@@ -10,7 +10,7 @@ public class LoginController {
     // 设置注解权限  判断有没有这个角色
     @Secured("ROLE_fzy")
     @RequestMapping("/toMain")
-    public String login(){
+    public String toMain(){
         return "redirect:main.html";
     }
     // 可以根据权限或者角色判断
@@ -25,5 +25,8 @@ public class LoginController {
     public String thymeleaf(){
         return "thymeleaf";
     }
-
+    @RequestMapping("/login")
+    public String login(){
+        return "login";
+    }
 }

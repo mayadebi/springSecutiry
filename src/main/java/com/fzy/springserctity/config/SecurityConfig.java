@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 设置白名单
     public static final String[] whiteList = {
-            "/login.html",
+            "/login",
             "/error.html"
 //            "/css/**",
 //            "/**/*.css",
@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 // 自定义登录页面
-                .loginPage("/login.html")
+                .loginPage("/login")
                 // 必须和表单提交的接口一样 就会去执行自定义登录
                 .loginProcessingUrl("/login")
                 // 登录成功后跳转的页面  post请求需要在controller配置
@@ -98,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 退出
         http.logout()
                 // 退出成功后跳转的页面
-                .logoutSuccessUrl("/login.html")
+                .logoutSuccessUrl("/login")
                 // 定义退出接口 莫如logout  可以不写
                 .logoutUrl("/logout")
 
@@ -106,7 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         // 关闭防火墙
-        http.csrf().disable();
+//        http.csrf().disable();
     }
 
     // 把PasswordEncoder注册到spring  用来加密解密密码
