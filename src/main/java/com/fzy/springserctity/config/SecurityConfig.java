@@ -3,6 +3,7 @@ package com.fzy.springserctity.config;
 import com.fzy.springserctity.handler.MyAccessDenidfHandler;
 import com.fzy.springserctity.handler.MyAuthenticationFailureHandler;
 import com.fzy.springserctity.handler.MyAuthenticationSuccessHandler;
+import com.fzy.springserctity.service.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -27,15 +33,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //            "/**/*.jpg",
     };
     // 设置正则表达式白名单
-    public static final String[] zzWhiteList = {
-            ".+[.]png"
-    };
+//    public static final String[] zzWhiteList = {
+//            ".+[.]png"
+//    };
     @Autowired
     private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
     @Autowired
     private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
     @Autowired
     private MyAccessDenidfHandler myAccessDenidfHandler;
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private PersistentTokenRepository persistentTokenRepository;
+    @Autowired
+    private UserDetailServiceImpl userDetailService;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -74,7 +86,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 自定义403
         http.exceptionHandling().accessDeniedHandler(myAccessDenidfHandler);
-
+        // 记住我
+        http.rememberMe()
+                // 设置数据源
+                .tokenRepository(persistentTokenRepository)
+                // 超时时间默认俩周
+                .tokenValiditySeconds(60)
+                // 自定义登录逻辑
+                .userDetailsService(userDetailService)
+        ;
         // 关闭防火墙
         http.csrf().disable();
     }
@@ -83,5 +103,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder getPs() {
         return new BCryptPasswordEncoder();
+    }
+    // 记住我要注入的bean
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(){
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        // 设置数据源
+        jdbcTokenRepository.setDataSource(dataSource);
+        // 自动建表  第一次启动时开启 第二次启动注释掉
+//        jdbcTokenRepository.setCreateTableOnStartup(true);
+        return jdbcTokenRepository;
     }
 }
