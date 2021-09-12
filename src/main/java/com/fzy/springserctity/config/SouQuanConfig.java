@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 // 授权码服务器
 @Configuration
@@ -22,6 +23,11 @@ public class SouQuanConfig extends AuthorizationServerConfigurerAdapter {
     private UserDetailServiceImpl userDetailService;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    @Qualifier("jwtTokenStore")
+    private TokenStore tokenStore;
+    @Autowired
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
 //    @Autowired
 //    @Qualifier("redisTokenStore")
 //    private TokenStore tokenStore;
@@ -35,6 +41,9 @@ public class SouQuanConfig extends AuthorizationServerConfigurerAdapter {
                 .authenticationManager(authenticationManager)
                 // 存入redis
 //                .tokenStore(tokenStore)
+                // 整合jwt
+                .tokenStore(tokenStore)
+                .accessTokenConverter(jwtAccessTokenConverter)
         ;
         ;
     }

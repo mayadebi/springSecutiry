@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义登录页面
                 .loginPage("/login")
                 // 必须和表单提交的接口一样 就会去执行自定义登录
-                .loginProcessingUrl("/login")
+//                .loginProcessingUrl("/login")
                 // 登录成功后跳转的页面  post请求需要在controller配置
 //                .successForwardUrl("/toMain")
                 // 使用自定义登录处理器
