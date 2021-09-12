@@ -22,9 +22,9 @@ public class SouQuanConfig extends AuthorizationServerConfigurerAdapter {
     private UserDetailServiceImpl userDetailService;
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    @Qualifier("redisTokenStore")
-    private TokenStore tokenStore;
+//    @Autowired
+//    @Qualifier("redisTokenStore")
+//    private TokenStore tokenStore;
     // 密码授权
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -34,7 +34,7 @@ public class SouQuanConfig extends AuthorizationServerConfigurerAdapter {
                 // 授权管理器
                 .authenticationManager(authenticationManager)
                 // 存入redis
-                .tokenStore(tokenStore)
+//                .tokenStore(tokenStore)
         ;
         ;
     }
