@@ -60,6 +60,8 @@ public class SouQuanConfig extends AuthorizationServerConfigurerAdapter {
                 .tokenStore(tokenStore)
                 .accessTokenConverter(jwtAccessTokenConverter)
                 .tokenEnhancer(chain)
+
+
         ;
         ;
     }
@@ -75,7 +77,13 @@ public class SouQuanConfig extends AuthorizationServerConfigurerAdapter {
                 .redirectUris("http://www.baibu.com")
                 // 授权范围
                 .scopes("all")
-                // 授权类型
-                .authorizedGrantTypes("authorization_code","password");
+                // 设置令牌时间
+                .accessTokenValiditySeconds(60)
+                // 设置刷新令牌时间
+                .refreshTokenValiditySeconds(86400)
+                // 授权类型  authorization_code 授权码
+                // password 密码模式
+                // refresh_token 刷新令牌
+                .authorizedGrantTypes("authorization_code","password","refresh_token");
     }
 }
