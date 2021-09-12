@@ -21,4 +21,8 @@ public class JwtConfig {
         jwtAccessTokenConverter.setSigningKey("fzy123456");
         return jwtAccessTokenConverter;
     }
+    @Bean
+    public JwtTokenEnhancer jwtTokenEnhancer(){
+        return new JwtTokenEnhancer();
+    }
 }
