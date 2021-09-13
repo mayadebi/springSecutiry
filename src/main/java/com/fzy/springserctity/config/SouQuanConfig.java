@@ -81,6 +81,8 @@ public class SouQuanConfig extends AuthorizationServerConfigurerAdapter {
                 .accessTokenValiditySeconds(60)
                 // 设置刷新令牌时间
                 .refreshTokenValiditySeconds(86400)
+                // 自动授权
+                .autoApprove(true)
                 // 授权类型  authorization_code 授权码
                 // password 密码模式
                 // refresh_token 刷新令牌
